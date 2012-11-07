@@ -6,6 +6,7 @@ module XcodeBuild
       include Rake::DSL if defined?(Rake::DSL)
 
       attr_accessor :project_name
+      attr_accessor :build_dir
       attr_accessor :target
       attr_accessor :workspace
       attr_accessor :scheme
@@ -62,8 +63,9 @@ module XcodeBuild
           opts << "-configuration \"#{configuration}\"" if configuration
           opts << "-arch #{arch}" if arch
           opts << "-sdk #{sdk}" if sdk
-          opts << "-xcconfig #{xcconfig}" if xcconfig
-          
+	  opts << "-xcconfig #{xcconfig}" if xcconfig
+          opts << "DEPLOYMENT_LOCATION=YES DSTROOT=#{build_dir} DWARF_DSYM_FOLDER_PATH=#{build_dir}" if build_dir 
+ 
           @build_settings.each do |setting, value|
             opts << "#{setting}=#{value}"
           end
